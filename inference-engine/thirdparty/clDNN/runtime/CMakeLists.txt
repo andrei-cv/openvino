@@ -23,10 +23,20 @@ file(GLOB __CLDNN_Sources__ocl
     "${__CLDNN_Directory__main}/ocl/*.cpp"
 )
 
+file(GLOB __CLDNN_Sources__ze
+    "${__CLDNN_Directory__main}/ze/*.h"
+    "${__CLDNN_Directory__main}/ze/*.hpp"
+    "${__CLDNN_Directory__main}/ze/*.cpp"
+)
+
 set(__CLDNN_AllSources
     ${__CLDNN_Sources__main}
     ${__CLDNN_Sources__ocl}
-  )
+)
+
+if (GPU_BACKEND STREQUAL "L0")
+  list(APPEND __CLDNN_AllSources ${__CLDNN_Sources__ze})
+endif()
 
 # =============================================== Filters ==============================================
 
@@ -50,6 +60,9 @@ add_library("${CLDNN_BUILD__PROJ}" STATIC
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   target_compile_options(${CLDNN_BUILD__PROJ} PRIVATE -Os)
 endif()
+if (GPU_BACKEND STREQUAL "L0")
+  target_compile_definitions("${CLDNN_BUILD__PROJ}" PUBLIC GPU_ENABLE_ZE_BACKEND)
+endif()
 
 set_property(TARGET "${CLDNN_BUILD__PROJ}" PROPERTY PROJECT_LABEL "${CLDNN_BUILD__PROJ_LABEL}")
 
@@ -64,6 +77,7 @@ endif()
 target_link_libraries("${CLDNN_BUILD__PROJ}" PRIVATE
     OpenCL
     openvino::itt
+    ${LevelZero_LIBRARY}
   )
 
 if(ENABLE_ONEDNN_FOR_GPU)

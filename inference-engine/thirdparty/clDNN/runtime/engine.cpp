@@ -10,6 +10,7 @@
 #include "cldnn/runtime/debug_configuration.hpp"
 
 #include "ocl/ocl_engine_factory.hpp"
+#include "ze/ze_engine_factory.hpp"
 
 #include <string>
 #include <vector>
@@ -197,6 +198,7 @@ std::shared_ptr<cldnn::engine> engine::create(engine_types engine_type,
                                               const InferenceEngine::ITaskExecutor::Ptr task_executor) {
     switch (engine_type) {
         case engine_types::ocl: return ocl::create_ocl_engine(device, runtime_type, configuration, task_executor);
+        case engine_types::ze: return ze::create_ze_engine(device, runtime_type, configuration);
         default: throw std::runtime_error("Invalid engine type");
     }
 }

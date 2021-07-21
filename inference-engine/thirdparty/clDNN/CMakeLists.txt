@@ -8,6 +8,8 @@ set(CLDNN__PROJ_NAME "clDNN")
 # Default languages: C, C++.
 project("${CLDNN__PROJ_NAME}")
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 # ======================================================================================================
 # ====================================== HELPER CONSTANT VARIABLES =====================================
 # ======================================================================================================
@@ -28,6 +30,9 @@ set(CLDNN__KERNEL_SELECTOR_DIR       "${CMAKE_CURRENT_SOURCE_DIR}/kernel_selecto
 
 # Path which points to directory with runtime
 set(CLDNN__RUNTIME_DIR       "${CMAKE_CURRENT_SOURCE_DIR}/runtime")
+
+set(GPU_BACKEND "L0" CACHE STRING "selected GPU backed (OCL/L0)" FORCE)
+find_package(LevelZero REQUIRED)
 
 # Code generation settings.
 
