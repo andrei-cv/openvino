@@ -7,6 +7,7 @@
 #include "cldnn/runtime/kernel.hpp"
 #include "cldnn/runtime/engine.hpp"
 #include "ocl/ocl_common.hpp"
+#include "ze/ze_common.hpp"
 
 #include <memory>
 

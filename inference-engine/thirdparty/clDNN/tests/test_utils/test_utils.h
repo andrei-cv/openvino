@@ -250,8 +250,9 @@ template <class T> T    get_value(T* ptr, uint32_t index) { return ptr[index]; }
 
 template<typename T>
 void set_values(cldnn::memory::ptr mem, std::initializer_list<T> args) {
+    std::cout << "set_values<0>" << std::endl;
     cldnn::mem_lock<T> ptr(mem, get_test_stream());
-
+    std::cout << "set_values<1>" << std::endl;
     auto it = ptr.begin();
     for(auto x : args)
         *it++ = x;

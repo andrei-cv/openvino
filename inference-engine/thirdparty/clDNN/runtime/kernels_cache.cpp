@@ -5,7 +5,13 @@
 #include "kernels_factory.hpp"
 #include "kernels_cache.hpp"
 #include "ocl/ocl_engine.hpp"
+#include "ocl/ocl_device_detector.hpp"
 #include "cldnn/runtime/debug_configuration.hpp"
+#include <level_zero/ze_api.h>
+#include <level_zero/zes_api.h>
+
+#include "ze/ze_device.hpp"
+#include "ze/ze_common.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -408,6 +414,14 @@ void kernels_cache::build_all() {
     if (_engine.type() == engine_types::ocl) {
         _build_engine = std::unique_ptr<ocl::ocl_engine>(new ocl::ocl_engine(_engine.get_device(), runtime_types::ocl,
                                                                     _engine.configuration(), _engine.get_task_executor()));
+    } else if (_engine.type() == engine_types::ze) {
+        ocl::ocl_device_detector detector;
+        auto device_map = detector.get_available_devices(nullptr, nullptr);
+        //ze_device_handle_t device = std::dynamic_pointer_cast<ze::ze_device>(_engine.get_device())->get_device();
+
+        //ocl::ocl_device build_device = device_map.begin()->second;// device_map.front();
+        auto build_device = device_map.begin()->second;
+        _build_engine = std::unique_ptr<ocl::ocl_engine>(new ocl::ocl_engine(build_device, runtime_types::ocl, _engine.configuration()));
     }
     std::vector<batch_program> batches;
     {

@@ -212,12 +212,14 @@ TEST(fully_connected_gpu, no_biases) {
     network network(engine, topology);
     network.set_input_data("input", input_prim);
 
+    std::cout << "network.execute() start" << std::endl;
     auto outputs = network.execute();
+    std::cout << "network.execute() done" << std::endl;
     EXPECT_EQ(outputs.size(), size_t(1));
     EXPECT_EQ(outputs.begin()->first, "full_con_prim");
-
+    std::cout << "outputs.begin()->second.get_memory()" << std::endl;
     auto output_prim = outputs.begin()->second.get_memory();
-
+    std::cout << "ldnn::mem_lock" << std::endl;
     cldnn::mem_lock<float> output_ptr (output_prim, get_test_stream());
 
     EXPECT_EQ(1.5f, output_ptr[0]);
@@ -314,13 +316,16 @@ TEST(fully_connected_gpu, xb_f32_batch_1) {
     auto& engine = get_test_engine();
 
     auto input_prim = engine.allocate_memory({ data_types::f32, format::yxfb, { input_b, 1, input_x, 1 } });
+    std::cout << "input_prim" << std::endl;
     auto weights_prim = engine.allocate_memory({ data_types::f32,format::bfyx,{ weight_b, 1, weight_x, 1 } });
+    std::cout << "weights_prim" << std::endl;
     auto bias_prim = engine.allocate_memory({ data_types::f32,format::bfyx, { 1,1,output_f, 1} });
-
+    std::cout << "bias_prim" << std::endl;
+    
     set_values(input_prim, { -0.5f, 2.0f, 0.5f });
     set_values(weights_prim, { 1.5f, 1.0f, 0.5f, -1.0f, 0.0f, 0.5f, 0.5f, -0.5f, -2.0f, -0.5f, 1.0f, 1.5f });
     set_values(bias_prim, { 1.0f, 2.0f, 3.0f, 4.0f });
-
+    std::cout << "set_values" << std::endl;
     topology topology(
         input_layout("input", input_prim->get_layout()),
         data("weights", weights_prim),
