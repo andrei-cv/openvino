@@ -8,6 +8,7 @@
 #include "cldnn/runtime/debug_configuration.hpp"
 
 #include "ocl/ocl_memory.hpp"
+#include "ze/ze_memory.hpp"
 
 #include <string>
 #include <vector>
@@ -45,6 +46,7 @@ memory::~memory() {
 std::unique_ptr<surfaces_lock> surfaces_lock::create(engine_types engine_type, std::vector<memory::ptr> mem, const stream& stream) {
     switch (engine_type) {
     case engine_types::ocl: return std::unique_ptr<ocl::ocl_surfaces_lock>(new ocl::ocl_surfaces_lock(mem, stream));
+    case engine_types::ze: return nullptr;
     default: throw std::runtime_error("Unsupported engine type in surfaces_lock::create");
     }
 }
