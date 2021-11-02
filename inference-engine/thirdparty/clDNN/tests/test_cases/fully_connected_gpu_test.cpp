@@ -219,7 +219,7 @@ TEST(fully_connected_gpu, no_biases) {
     EXPECT_EQ(outputs.begin()->first, "full_con_prim");
     std::cout << "outputs.begin()->second.get_memory()" << std::endl;
     auto output_prim = outputs.begin()->second.get_memory();
-    std::cout << "ldnn::mem_lock" << std::endl;
+    std::cout << "output_prim" << std::endl;
     cldnn::mem_lock<float> output_ptr (output_prim, get_test_stream());
 
     EXPECT_EQ(1.5f, output_ptr[0]);
