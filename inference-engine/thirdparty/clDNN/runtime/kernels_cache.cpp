@@ -421,7 +421,8 @@ void kernels_cache::build_all() {
 
         //ocl::ocl_device build_device = device_map.begin()->second;// device_map.front();
         auto build_device = device_map.begin()->second;
-        _build_engine = std::unique_ptr<ocl::ocl_engine>(new ocl::ocl_engine(build_device, runtime_types::ocl, _engine.configuration()));
+        _build_engine = std::unique_ptr<ocl::ocl_engine>(new ocl::ocl_engine(build_device, runtime_types::ocl,
+                                                                _engine.configuration(), _engine.get_task_executor()));
     }
     std::vector<batch_program> batches;
     {
