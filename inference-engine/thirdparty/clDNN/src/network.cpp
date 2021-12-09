@@ -284,18 +284,21 @@ void network::set_arguments() {
 }
 
 void network::reset_execution(bool wait) {
+    //std::cout << "reset_execution" << std::endl;
     if (wait && _events.size() > 0) {
         std::vector<event::ptr> events;
         for (auto& pair : _events) {
+            //std::cout << "pair " << pair.second << std::endl;
             auto& ev = pair.second;
             if (ev->is_set())
                 continue;
 
             events.push_back(ev);
         }
-
+        //std::cout << "get_stream().wait_for_events(events)" << std::endl;
         get_stream().wait_for_events(events);
     }
+    //std::cout << "_events.clear()" << std::endl;
     _events.clear();
 }
 
@@ -583,7 +586,7 @@ void network::execute_impl(const std::vector<event::ptr>& events) {
     reset_execution(false);
     GPU_DEBUG_GET_INSTANCE(debug_config);
     GPU_DEBUG_IF(debug_config->verbose >= 1)
-        GPU_DEBUG_COUT << "----------------------------------------------" << std::endl;
+    GPU_DEBUG_COUT << "----------------------------------------------" << std::endl;
 
     std::vector<memory::ptr> in_out_mem;
     for (auto& inst : _inputs) {

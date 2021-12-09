@@ -25,6 +25,7 @@ void event::set() {
     if (_set)
         return;
     _set = true;
+    std::cout << "set event true" << std::endl;
     set_impl();
     call_handlers();
 }
