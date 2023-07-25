@@ -2,12 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-#include <queue>
-
-#include "openvino/core/type/element_type_traits.hpp"
+#include "common_test_utils/ov_tensor_utils.hpp"
 
 #include "common_test_utils/data_utils.hpp"
-#include "common_test_utils/ov_tensor_utils.hpp"
+#include "openvino/core/type/element_type_traits.hpp"
+#include "precomp.hpp"
 
 namespace ov {
 namespace test {
@@ -16,7 +15,7 @@ ov::Tensor create_and_fill_tensor(
         const ov::element::Type element_type,
         const ov::Shape& shape,
         const uint32_t range,
-        const int32_t start_from,
+        const double_t start_from,
         const int32_t resolution,
         const int seed) {
     auto tensor = ov::Tensor{element_type, shape};
